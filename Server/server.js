@@ -2,8 +2,10 @@
 
 var express = require('express');
 //var router = require('./router.js')
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
 var bodyParser = require('body-parser');
-
+var path = require('path')
 var fs = require("fs");
 
 
@@ -48,6 +50,25 @@ server.post('/list', function(req, res) {
   list.push(req.body.data);
   console.log("post request is happenen!!!!", "req.body: ", req.body, "current list: ", list);
 });
+
+server.post('/upload', function (req, res) {
+    console.log("in new route with files");
+    console.log("req:", req, "req.body", req.body, "req.files", req.files, "req.file", req.file)
+    var tempPath = req.files.file.path,
+        targetPath = path.resolve('./uploads/image.png');
+    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
+        fs.rename(tempPath, targetPath, function(err) {
+            if (err) throw err;
+            console.log("Upload completed!");
+        });
+    } else {
+        fs.unlink(tempPath, function () {
+            if (err) throw err;
+            console.error("Only .png files are allowed!");
+        });
+    }
+    // ...
+})
 
 server.get('/list', function(req, res){
 	console.log('in sever.get /list, going to DB');

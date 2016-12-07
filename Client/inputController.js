@@ -12,7 +12,7 @@ angular.module('ChooseForMe',[]) // naming the module
 
 		$scope.save = function(){ // create a function that will send entered art to server
 			console.log("$scope.save called with: ", $scope.entry);
-			$scope.object.data  = $scope.entry;
+			$scope.object.data  = $scope.username + ': ' + $scope.entry;
 			var data = JSON.stringify($scope.object);
 			console.log("STRingafy me, baby!", data);
 			$http({

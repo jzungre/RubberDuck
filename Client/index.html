@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html ng-app="ChooseForMe">
-<head>
+<html ng-app="ChooseForMe"> 
 
+	
+
+<head>
+	<!-- bring in angular, angular-route and ajax / jquery -->   
 </head>
 <body>
+	<img src="rubberducky.png" alt="rubberDuck" height="168" width="168">
+	<img src="pixel-speech-bubble.png" alt="speechbubble" height="168" width="400">
+	
 	<h1>Rubber Duck Debugging and Support Group</h1>
 	<div ng-controller="inputController">
 		<form>
@@ -15,27 +21,55 @@
 			<input type="text" ng-model="entry" placeholder="Help with Closure..." name="art">
 			<input type="submit" ng-click="save()">
 		</form>
-		<form method="post" enctype="multipart/form-data" action="/upload">
+		<!-- Image upload -->
+		<form  ng-controller="inputController as up" name="up.upload_form">
+                
+            <input 
+                type="file" 
+                ngf-select 
+                ng-model="up.file" 
+                name="file" 
+                ngf-pattern="'image/*'"
+                accept="image/*" 
+                ngf-max-size="20MB" 
+                />
+            Image thumbnail: <img style="width:200px;" ng-show="!!up.file" ngf-thumbnail="up.file || '/thumb.jpg'"/>
+            <i ng-show="up.upload_form.file.$error.required">*required</i><br>
+            <i ng-show="up.upload_form.file.$error.maxSize">File too large 
+            {{up.file.size / 1000000|number:1}}MB: max 20M</i>
+           <!--  Multiple files
+            <div class="button" ngf-select ng-model="up.files" ngf-multiple="true">Select</div>
+            Drop files: <div ngf-drop ng-model="up.files" class="drop-box">Drop</div> -->
+            <br>
+            <button type="submit" ng-click="submit()">submit</button>
+            <p>{{up.progress}}</p>
+        </form>
+
+
+
+		<!-- <input type="file" id="file" name="file"/>
+		<button ng-click="add()">Add</button> -->
+	<!-- 	<form method="post" enctype="multipart/form-data" action="/upload">
     		<input type="file" name="file">
     		<input type="submit" value="Submit">
-		</form>
+		</form> -->
 
 		<!-- <input type="submit" value="Show me my List!" ng-click="list()"> -->
 	<div ng-repeat="thing in data">
-	<h4>{{thing.name}}</h4>
-
-
-
+	<p>{{thing.name}}</p>
 	<div>
 
 	</div>
 
 
-	<!-- bring in angular, angular-route and ajax / jquery -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script> 
-    <script src="//code.angularjs.org/1.2.1/angular-route.min.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="inputController.js"></script>
+	
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script type="text/javascript" src="node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+<script type="text/javascript" src="node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>	
+<script src="//code.angularjs.org/1.2.1/angular-route.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="inputController.js"></script>
+
 </html>

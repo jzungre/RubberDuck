@@ -1,20 +1,44 @@
 angular.module('ChooseForMe',['ngFileUpload']) // naming the module
-	.controller('inputController', function($scope, $http){ // defining the controller, inject $scope and $http
+	.controller('inputController', ['Upload', '$window', '$scope','$http', function(Upload, $window, $scope, $http){ // defining the controller, inject $scope and $http
+		
 		$scope.entry;
 		$scope.username = 'Anonymous';
 		$scope.password;
 
-		$scope.newData = []
+		$scope.newData = [];
 		$scope.pictures = [];
 		$scope.object = {};
 		$scope.data = [];
-		$scope.temp = []
+		$scope.temp = [];
 			// declare the $scope.entry property
-
-		$scope.submit = function(file){
-			console.log('File, yo!', file);
-
+		var vm = this;
+		vm.submit = function(){
+			if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
+            vm.upload(vm.file); //call upload function
+			}
 		}
+
+		vm.upload = function (file) {
+			console.log("me file: ", file);
+	        Upload.upload({
+	            url: 'http://localhost:8672/upload', //webAPI exposed to upload the file
+	            data:{file:file} //pass file as data, should be user ng-model
+	        }).then(function (resp) { //upload function returns a promise
+	            if(resp.data.error_code === 0){ //validate success
+	                $window.alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
+	            } else {
+	                $window.alert('an error occured');
+	            }
+	        }, function (resp) { //catch error
+	            console.log('Error status: ' + resp.status);
+	            $window.alert('Error status: ' + resp.status);
+	        }, function (evt) { 
+	            console.log(evt);
+	            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+	            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+	            vm.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
+	        });
+	    };
 
 		$scope.save = function(){ // create a function that will send entered art to server
 			console.log("$scope.save called with: ", $scope.entry);
@@ -49,6 +73,7 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 		  		console.log('uh oh, we got an error: ', response);
 		  	});
 		}
+
 		$scope.add = function(){
   			console.log("in add")
   			var f = document.getElementById('file').files[0];
@@ -118,4 +143,4 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 
 	}
 
-	})
+	}])

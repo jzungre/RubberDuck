@@ -18,6 +18,20 @@ var list = [];
 //M add middleware
 server.use(bodyParser.json())
 
+var storage = multer.diskStorage({ //multers disk storage settings
+        destination: function (req, file, cb) {
+            cb(null, './uploads/');
+        },
+        filename: function (req, file, cb) {
+            var datetimestamp = Date.now();
+            cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1]);
+        } // format for saving with multer
+    });
+
+var upload = multer({ //generate multer instance with storage and single file settings
+                    storage: storage
+                }).single('file');
+
 var db = require('knex')({
 	client: 'sqlite3',
 	connection: {
@@ -51,24 +65,16 @@ server.post('/list', function(req, res) {
   console.log("post request is happenen!!!!", "req.body: ", req.body, "current list: ", list);
 });
 
-server.post('/upload', function (req, res) {
-    console.log("in new route with files");
-    console.log("req:", req, "req.body", req.body, "req.files", req.files, "req.file", req.file)
-    var tempPath = req.files.file.path,
-        targetPath = path.resolve('./uploads/image.png');
-    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
-        fs.rename(tempPath, targetPath, function(err) {
-            if (err) throw err;
-            console.log("Upload completed!");
+    server.post('/upload', function(req, res) {
+        console.log('the image req', req.body);
+        upload(req,res,function(err){
+            if(err){
+                 res.json({error_code:1,err_desc:err});
+                 return;
+            }
+             res.json({error_code:0,err_desc:null});
         });
-    } else {
-        fs.unlink(tempPath, function () {
-            if (err) throw err;
-            console.error("Only .png files are allowed!");
-        });
-    }
-    // ...
-})
+    });
 
 server.get('/list', function(req, res){
 	console.log('in sever.get /list, going to DB');

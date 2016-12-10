@@ -18,7 +18,8 @@
 		</form>
 		<h4>Tell the Rubber Duck your code problem or discuss it with someone here!</h4>
 		<form>
-			<input type="text" ng-model="entry" placeholder="Help with Closure..." name="art">
+			<textarea type="text" ng-model="entry" placeholder="Help with Closure..." name="art" rows="15" cols="75">Help with Closure...</textarea>
+			<br>
 			<input type="submit" ng-click="save()">
 		</form>
 		<!-- Image upload -->
@@ -55,16 +56,26 @@
 		</form> -->
 
 		<!-- <input type="submit" value="Show me my List!" ng-click="list()"> -->
-	
+Rubber Duck Debugging and Support Group is based on <a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging">this idea.</a>
+	<h2>Chat</h2>
 	<div ng-repeat="thing in textData">
 	<p>{{thing}}</p>
-	<div>	
+	<div>
 
-	<div ng-repeat="myImage in picData">
+	<div ng-controller="inputController as vm">
+		<div ng-repeat="myImage in vm.picData">
+		<img ng-src="{{vm.getImagePath(myImage)}}"/>
+		</div>
+	</div>
+
+</div>
+
+	
+	<!-- <div ng-repeat="myImage in picData">
 	<img ng-src="{{getImagePath(myImage)}}"/>
-	</div>
+	</div> -->
 
-	</div>
+	
 
 
 	

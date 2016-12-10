@@ -1,10 +1,13 @@
 angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 	.controller('inputController', ['Upload', '$window', '$scope','$http', function(Upload, $window, $scope, $http){ // defining the controller, inject $scope and $http
 		
+		var vm = this;
 		$scope.entry;
 		$scope.username = 'Anonymous';
 		$scope.password;
 
+		var temporary;
+		vm.picData;
 		$scope.picData = []
 		$scope.textData = ['hey'];
 		var newData = $scope.newData;
@@ -13,17 +16,28 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 		$scope.data = [];
 		$scope.temp = [];
 			// declare the $scope.entry property
+	
+		
+	vm.getImagePath = function(imageName) {
+    	console.log('pathin: ',"/uploads/" + imageName )
+    	return "/uploads/" + imageName;};  
+    	
+    vm.submit = function(){
+        if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
+        vm.upload(vm.file); //call upload function
+      }
+}
 
-		$scope.getImagePath = function(imageName) {
-			console.log('pathin: ',"/uploads/" + imageName )
-		return "/uploads/" + imageName;
-};	
-		var vm = this;
-		vm.submit = function(){
-			if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
-            vm.upload(vm.file); //call upload function
-			}
-		}
+// 		$scope.getImagePath = function(imageName) {
+// 			console.log('pathin: ',"/uploads/" + imageName )
+// 		return "/uploads/" + imageName;
+// };	
+// 		var vm = this;
+// 		vm.submit = function(){
+// 			if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
+//             vm.upload(vm.file); //call upload function
+// 			}
+// 		}
 
 		vm.upload = function (file) {
 			console.log("me file: ", file);
@@ -43,7 +57,10 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 					   console.log('This is the Picture response data: ', response.data);
 					   $scope.picData = response.data;
 					   console.log('PICS!!!!!!!!!!',$scope.picData)
-					   console.log("in client success response, sending this to local $scope.data: ", $scope.data, "scope.temp: ", $scope.temp);
+					   temporary = $scope.picData;
+					   vm.picData = temporary;
+					   console.log("TEMP!", temporary, 'vm.picData', vm.picData);
+					   console.log("in client success response, sending this to local $scope.data: ", $scope.data, "scope.temp: ", temporary);
 						}, function errorCallback(response) {
 				  		console.log('uh oh, we got an error in the Get response: ', response);
 				    	// called asynchronously if an error occurs
@@ -67,10 +84,10 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 
 		$scope.save = function(){ // create a function that will send entered art to server
 			console.log("$scope.save called with: ", $scope.entry);
-			var newEntry = $scope.entry;
+			var newEntry = $scope.username + ': ' + $scope.entry;
 			$scope.textData.push(newEntry)
-			console.log('textData after text:',$scope.textData, "and picData:", $scope.picData);
-			$scope.object.data  = $scope.username + ': ' + $scope.entry;
+			
+			$scope.object.data  = newEntry;
 			var data = JSON.stringify($scope.object);
 			console.log("STRingafied data", data);
 			$http({
@@ -88,7 +105,7 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 				}).then(function successCallback(response) {
 			   console.log('THIS IS THE RESPONSE DATA: ', response.data);
 			   $scope.data = response.data;
-			   console.log("in client success response, sending this to local $scope.data: ", $scope.data, "scope.temp: ", $scope.temp);
+			   console.log('textData after text:',$scope.textData, "and picData:", $scope.picData, "temporary", temporary, 'vm.picData', vm.picData);
 				}, function errorCallback(response) {
 		  		console.log('uh oh, we got an error in the Get response: ', response);
 		    	// called asynchronously if an error occurs

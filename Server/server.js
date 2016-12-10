@@ -104,9 +104,11 @@ server.get('/upload', function(req, res){
     console.log(picList);
 
   });
+picList.shift();  
 var data = JSON.stringify(picList);
 console.log("string pics: ", picList);
 res.send(data);
+picList = [];
 
 })
 })

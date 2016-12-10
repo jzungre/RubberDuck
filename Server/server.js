@@ -20,11 +20,13 @@ server.use(bodyParser.json())
 
 var storage = multer.diskStorage({ //multers disk storage settings
         destination: function (req, file, cb) {
-            cb(null, './uploads/');
+            cb(null, '../Client/uploads');
         },
         filename: function (req, file, cb) {
+            console.log('infilename! with file', file, 'and cb', cb);
             var datetimestamp = Date.now();
-            cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1]);
+            cb(null, file.originalname);
+            // cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1]);
         } // format for saving with multer
     });
 

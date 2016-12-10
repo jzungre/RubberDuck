@@ -5,12 +5,19 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 		$scope.username = 'Anonymous';
 		$scope.password;
 
-		$scope.newData = [];
+		$scope.picData = []
+		$scope.textData = ['hey'];
+		var newData = $scope.newData;
 		$scope.pictures = [];
 		$scope.object = {};
 		$scope.data = [];
 		$scope.temp = [];
 			// declare the $scope.entry property
+
+		$scope.getImagePath = function(imageName) {
+			console.log('pathin: ',"/uploads/" + imageName )
+		return "/uploads/" + imageName;
+};	
 		var vm = this;
 		vm.submit = function(){
 			if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
@@ -20,12 +27,16 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 
 		vm.upload = function (file) {
 			console.log("me file: ", file);
+			var newFile = file;
+			
 	        Upload.upload({
 	            url: 'http://localhost:8672/upload', //webAPI exposed to upload the file
 	            data:{file:file} //pass file as data, should be user ng-model
 	        }).then(function (resp) { //upload function returns a promise
 	            if(resp.data.error_code === 0){ //validate success
 	                $window.alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
+	                $scope.picData.push(newFile.name)
+					console.log('after image upload picData', $scope.picData, "and textData", $scope.textData);
 	            } else {
 	                $window.alert('an error occured');
 	            }
@@ -43,8 +54,8 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 		$scope.save = function(){ // create a function that will send entered art to server
 			console.log("$scope.save called with: ", $scope.entry);
 			var newEntry = $scope.entry;
-			$scope.newData.push(newEntry)
-			console.log($scope.newData);
+			$scope.textData.push(newEntry)
+			console.log('textData after text:',$scope.textData, "and picData:", $scope.picData);
 			$scope.object.data  = $scope.username + ': ' + $scope.entry;
 			var data = JSON.stringify($scope.object);
 			console.log("STRingafied data", data);

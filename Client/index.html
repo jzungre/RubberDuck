@@ -55,9 +55,14 @@
 		</form> -->
 
 		<!-- <input type="submit" value="Show me my List!" ng-click="list()"> -->
-	<div ng-repeat="thing in data">
-	<p>{{thing.name}}</p>
-	<div>
+	
+	<div ng-repeat="thing in textData">
+	<p>{{thing}}</p>
+	<div>	
+
+	<div ng-repeat="myImage in picData">
+	<img ng-src="{{getImagePath(myImage)}}"/>
+	</div>
 
 	</div>
 

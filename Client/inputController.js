@@ -35,8 +35,22 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 	        }).then(function (resp) { //upload function returns a promise
 	            if(resp.data.error_code === 0){ //validate success
 	                $window.alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
-	                $scope.picData.push(newFile.name)
-					console.log('after image upload picData', $scope.picData, "and textData", $scope.textData);
+	                   	$http({
+						'method': 'GET',
+						'url': '/upload',
+						'Content-Type': 'application/json'
+						}).then(function successCallback(response) {
+					   console.log('This is the Picture response data: ', response.data);
+					   $scope.picData = response.data;
+					   console.log('PICS!!!!!!!!!!',$scope.picData)
+					   console.log("in client success response, sending this to local $scope.data: ", $scope.data, "scope.temp: ", $scope.temp);
+						}, function errorCallback(response) {
+				  		console.log('uh oh, we got an error in the Get response: ', response);
+				    	// called asynchronously if an error occurs
+				    	// or server returns response with an error status.
+						});
+	    //             $scope.picData.push(newFile.name)
+					// console.log('after image upload picData', $scope.picData, "and textData", $scope.textData);
 	            } else {
 	                $window.alert('an error occured');
 	            }

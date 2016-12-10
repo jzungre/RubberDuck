@@ -12,6 +12,7 @@ var fs = require("fs");
 //I instantiate server
 var server = express();
 var list = [];
+var picList = [];
 
 
 
@@ -67,16 +68,16 @@ server.post('/list', function(req, res) {
   console.log("post request is happenen!!!!", "req.body: ", req.body, "current list: ", list);
 });
 
-    server.post('/upload', function(req, res) {
-        console.log('the image req', req.body);
-        upload(req,res,function(err){
-            if(err){
-                 res.json({error_code:1,err_desc:err});
-                 return;
-            }
-             res.json({error_code:0,err_desc:null});
-        });
+server.post('/upload', function(req, res) {
+    console.log('the image req', req.body);
+    upload(req,res,function(err){
+        if(err){
+             res.json({error_code:1,err_desc:err});
+             return;
+        }
+         res.json({error_code:0,err_desc:null});
     });
+});
 
 server.get('/list', function(req, res){
 	console.log('in sever.get /list, going to DB');
@@ -93,6 +94,22 @@ server.get('/list', function(req, res){
 
 })
 
+server.get('/upload', function(req, res){
+  console.log('in sever.get /UPLOADS');
+  var testFolder = '../Client/uploads';
+  fs.readdir(testFolder, (err, files) => {
+  files.forEach(file => {
+    console.log('folder file:',file);
+    picList.push(file);
+    console.log(picList);
+
+  });
+var data = JSON.stringify(picList);
+console.log("string pics: ", picList);
+res.send(data);
+
+})
+})
 //Orient ------ server up static files
 server.use(express.static(__dirname + "/../Client"))
 

@@ -129,7 +129,7 @@ server.use(express.static(__dirname + "/../Client"))
 // })
 
 //Listen ---- make server listen
-server.listen(8672);
+server.listen(process.env.PORT || 8672);
 console.log("in router YO!!! listening to 8672")
 
 

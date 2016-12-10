@@ -1,4 +1,4 @@
-angular.module('ChooseForMe',['ngFileUpload']) // naming the module
+angular.module('RubberDuck',['ngFileUpload']) // naming the module
 	.controller('inputController', ['Upload', '$window', '$scope','$http', function(Upload, $window, $scope, $http){ // defining the controller, inject $scope and $http
 		
 		var vm = this;
@@ -9,7 +9,7 @@ angular.module('ChooseForMe',['ngFileUpload']) // naming the module
 		var temporary;
 		vm.picData;
 		$scope.picData = []
-		$scope.textData = ['hey'];
+		$scope.textData = [];
 		var newData = $scope.newData;
 		$scope.pictures = [];
 		$scope.object = {};

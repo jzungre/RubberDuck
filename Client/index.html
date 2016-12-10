@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="ChooseForMe"> 
+<html ng-app="RubberDuck"> 
 
 	
 
@@ -17,8 +17,12 @@
 			<input type="text" ng-model="username" placeholder="Username">
 		</form>
 		<h4>Tell the Rubber Duck your code problem or discuss it with someone here!</h4>
+		<h2>Chat</h2>
+		<div ng-repeat="thing in textData">
+			<p>{{thing}}</p>
+		</div>
 		<form>
-			<textarea type="text" ng-model="entry" placeholder="Help with Closure..." name="art" rows="15" cols="75">Help with Closure...</textarea>
+			<textarea type="text" ng-model="entry" placeholder="Help with Closure..." name="art" rows="10" cols="45">Help with Closure...</textarea>
 			<br>
 			<input type="submit" ng-click="save()">
 		</form>
@@ -34,7 +38,7 @@
                 accept="image/*" 
                 ngf-max-size="20MB" 
                 />
-            Image thumbnail: <img style="width:200px;" ng-show="!!up.file" ngf-thumbnail="up.file || '/thumb.jpg'"/>
+            Image thumbnail: <img style="width:100px;" ng-show="!!up.file" ngf-thumbnail="up.file || '/thumb.jpg'"/>
             <i ng-show="up.upload_form.file.$error.required">*required</i><br>
             <i ng-show="up.upload_form.file.$error.maxSize">File too large 
             {{up.file.size / 1000000|number:1}}MB: max 20M</i>
@@ -57,10 +61,7 @@
 
 		<!-- <input type="submit" value="Show me my List!" ng-click="list()"> -->
 Rubber Duck Debugging and Support Group is based on <a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging">this idea.</a>
-	<h2>Chat</h2>
-	<div ng-repeat="thing in textData">
-	<p>{{thing}}</p>
-	<div>
+	
 
 	<div ng-controller="inputController as vm">
 		<div ng-repeat="myImage in vm.picData">
